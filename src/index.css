@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --color-ink-950: #0b0e13;
+  --color-ink-900: #11161e;
+  --color-ink-850: #151b25;
+  --color-ink-800: #1b2330;
+  --color-ink-700: #283247;
+  --color-ink-600: #3a4660;
+  --color-ink-500: #4d5c7a;
+  --color-ink-400: #8a95a9;
+  --color-ink-300: #adb6c8;
+  --color-ink-200: #cfd5e0;
+  --color-ink-100: #eceff4;
+
+  --color-paper-100: #faf6ec;
+  --color-paper-200: #f1eada;
+  --color-paper-300: #e0d6bb;
+
+  --color-amber-400: #f7c45e;
+  --color-amber-500: #f0b132;
+  --color-amber-600: #d18f14;
+
+  --color-moss-400: #5fc390;
+  --color-moss-500: #3daa75;
+  --color-moss-600: #2d8a5e;
+
+  --color-coral-400: #ee6b61;
+  --color-coral-500: #e2544a;
+  --color-coral-600: #c13a31;
+
+  --color-sky-400: #6db4ea;
+  --color-sky-500: #4d99da;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-100);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-amber-500) 35%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber-500);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-700);
+    border: 3px solid var(--color-ink-900);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.tok-strct {
+  color: var(--color-amber-500);
+  font-weight: 500;
+}
+.tok-type {
+  color: var(--color-moss-400);
+}
+.tok-logic {
+  color: var(--color-amber-400);
+}
+.tok-builtin {
+  color: var(--color-sky-400);
+}
+.tok-num {
+  color: #e2a97c;
+}
+.tok-str {
+  color: #ddc9a0;
+}
+.tok-op {
+  color: var(--color-ink-400);
+}
+.tok-cmt {
+  color: var(--color-ink-500);
+  font-style: italic;
+}
+.tok-err {
+  color: var(--color-coral-500);
+  text-decoration: underline wavy var(--color-coral-500);
+}
+
+.tok-caret {
+  caret-color: var(--color-ink-100);
+}
