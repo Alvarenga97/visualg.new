@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, useState } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { nicknameDe, useUsuario } from '../lib/useAuth'
 
@@ -9,28 +9,37 @@ const linkCls = ({ isActive }: { isActive: boolean }) =>
       : 'text-ink-400 hover:bg-ink-850 hover:text-ink-200'
   }`
 
+const sidebarItemCls = (isActive: boolean) =>
+  `flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+    isActive ? 'bg-ink-800 text-ink-100' : 'text-ink-400 hover:bg-ink-850 hover:text-ink-200'
+  }`
+
 export default function Layout() {
   const user = useUsuario()
   const navigate = useNavigate()
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   const sair = async () => {
     await supabase?.auth.signOut()
     navigate('/')
   }
 
-  return (
-    <div className="flex min-h-screen flex-col bg-ink-950">
-      <header className="sticky top-0 z-40 border-b border-ink-800 bg-ink-950/85 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
+return (
+    <div className="min-h-screen bg-ink-950">
+      <header
+        className="sticky top-0 z-40 border-b border-ink-800 bg-ink-950/85 backdrop-blur"
+      >
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4">
           <NavLink to="/" className="flex items-center gap-2 font-semibold tracking-tight">
             <span className="grid h-7 w-7 place-items-center rounded-md bg-amber-500 font-mono text-sm font-bold text-ink-950">
-              {'{ }'}
+             {' '}
             </span>
             <span className="text-[15px]">
               Visualg<span className="text-amber-500">.new</span>
             </span>
           </NavLink>
-          <nav className="flex items-center gap-1">
+
+          <nav className="flex items-center gap-1 hidden sm:flex">
             <NavLink to="/exercicios" className={linkCls}>
               Exercícios
             </NavLink>
@@ -44,6 +53,7 @@ export default function Layout() {
               Ranking
             </NavLink>
           </nav>
+
           <div className="flex items-center gap-2">
             {user ? (
               <div className="flex items-center gap-2">
@@ -80,15 +90,97 @@ export default function Layout() {
           </div>
         </div>
       </header>
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <footer className="border-t border-ink-800">
-        <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-6 text-sm text-ink-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>Visualg.new — aprenda lógica de programação com Portugol.</p>
-          <p className="font-mono text-ink-500">algoritmo → ideia → código</p>
-        </div>
-      </footer>
+
+      <div className="flex min-h-screen flex-col max-w-7xl mx-auto">
+        <aside
+          className={`
+            ${sidebarCollapsed ? 'w-16' : 'w-64'}
+            flex-shrink-0 border-r border-ink-800 bg-ink-950/80
+            transition-all duration-200
+          `}
+        >
+          <div className="h-14 flex items-center justify-center border-b border-ink-800 px-4">
+            <span className="text-sm font-medium text-ink-400">
+              Visualg.new
+            </span>
+          </div>
+          <nav className="flex flex-col gap-1 px-2 py-2">
+            <NavLink
+              to="/"
+              className={sidebarItemCls(true)}
+              onClick={() => setSidebarCollapsed(true)}
+            >
+              Início
+            </NavLink>
+            <NavLink
+              to="/exercicios"
+              className={sidebarItemCls(false)}
+              onClick={() => setSidebarCollapsed(true)}
+            >
+              Exercícios
+            </NavLink>
+            <NavLink
+              to="/editor"
+              className={sidebarItemCls(false)}
+              onClick={() => setSidebarCollapsed(true)}
+            >
+              Editor
+            </NavLink>
+            <NavLink
+              to="/historico"
+              className={sidebarItemCls(false)}
+              onClick={() => setSidebarCollapsed(true)}
+            >
+              Histórico
+            </NavLink>
+            <NavLink
+              to="/ranking"
+              className={sidebarItemCls(false)}
+              onClick={() => setSidebarCollapsed(true)}
+            >
+              Ranking
+            </NavLink>
+          </nav>
+          {user ? (
+            <div className="mt-auto p-2 border-t border-ink-800">
+              <button
+                type="button"
+                onClick={sair}
+                className="w-full rounded-full border border-ink-700 px-3.5 py-1.5 text-sm text-ink-300 transition hover:border-ink-500 hover:text-ink-100"
+              >
+                Sair
+              </button>
+            </div>
+          ) : (
+            <>
+              <NavLink
+                to="/entrar"
+                className="w-full rounded-full border border-ink-700 px-3.5 py-1.5 text-sm text-ink-300 transition hover:border-ink-500 hover:text-ink-100"
+              >
+                Entrar
+              </NavLink>
+              <NavLink
+                to="/cadastro"
+                className="w-full rounded-full bg-amber-500 px-3.5 py-1.5 text-sm font-medium text-ink-950 transition hover:bg-amber-400"
+              >
+                Criar conta
+              </NavLink>
+            </>
+          )}
+        </aside>
+
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <Outlet />
+          <footer
+            className="border-t border-ink-800 bg-ink-950/80 pt-4 text-sm text-ink-400"
+          >
+            <div className="mx-auto max-w-7xl px-4 py-2">
+              <p>Visualg.new — aprenda lógica de programação com Portugol.</p>
+              <p className="font-mono text-ink-500">algoritmo → ideia → código</p>
+            </div>
+          </footer>
+        </main>
+      </div>
     </div>
   )
 }
